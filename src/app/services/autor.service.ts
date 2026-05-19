@@ -18,9 +18,8 @@ export class AutorService {
   }
 
   criar(autor: Autor): Observable<Autor> {
-    return this.http.post<Autor>(this.api, autor);
-  }
-
+  return this.http.post<Autor>(this.api, autor);
+}
   excluir(id: number) {
   return this.http.delete(`${this.api}/${id}`);
 }

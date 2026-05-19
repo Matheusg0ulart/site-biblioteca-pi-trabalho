@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -14,15 +14,17 @@ import { AutorService } from '../../services/autor.service';
 })
 export class AutoresComponent implements OnInit {
 
-  autores: Autor[] = [];
-  editando = false;
+  @Input() modo = 'cadastrar';
 
+  autores: Autor[] = [];
   autoresFiltrados: Autor[] = [];
 
-pesquisa = '';
+  editando = false;
+  pesquisa = '';
 
   autor: Autor = {
-    id: 0,
+    id: '',
+    codigo: 0,
     nome: '',
     dataNascimento: '',
     nacionalidade: ''
@@ -42,65 +44,55 @@ pesquisa = '';
   }
 
   salvar() {
-    this.autorService.criar(this.autor).subscribe(() => {
+    const maiorCodigo = this.autores.length > 0
+      ? Math.max(...this.autores.map(a => a.codigo || 0))
+      : 0;
 
-      this.autor = {
-        id: 0,
-        nome: '',
-        dataNascimento: '',
-        nacionalidade: ''
-      };
+    const novoAutor: Autor = {
+      ...this.autor,
+      codigo: maiorCodigo + 1
+    };
 
+    this.autorService.criar(novoAutor).subscribe(() => {
+      this.limparFormulario();
       this.listarAutores();
     });
   }
 
-  excluir(id: number) {
-
-  this.autorService.excluir(id).subscribe(() => {
-
-    this.listarAutores();
-
-  });
-
-}
-editar(autor: Autor) {
-
-  this.autor = { ...autor };
-
-  this.editando = true;
-
-}
-atualizar() {
-
-  this.autorService.atualizar(this.autor.id, this.autor)
-    .subscribe(() => {
-
-      this.autor = {
-        id: 0,
-        nome: '',
-        dataNascimento: '',
-        nacionalidade: ''
-      };
-
-      this.editando = false;
-
+  excluir(id: any) {
+    this.autorService.excluir(id).subscribe(() => {
       this.listarAutores();
-
     });
+  }
 
-}
-consultar() {
+  editar(autor: Autor) {
+    this.autor = { ...autor };
+    this.editando = true;
+  }
 
-  this.autoresFiltrados = this.autores.filter(a =>
+  atualizar() {
+    this.autorService.atualizar(this.autor.id, this.autor).subscribe(() => {
+      this.limparFormulario();
+      this.editando = false;
+      this.listarAutores();
+    });
+  }
 
-    a.nome.toLowerCase().includes(this.pesquisa.toLowerCase())
+  consultar() {
+    this.autoresFiltrados = this.autores.filter(a =>
+      a.nome.toLowerCase().includes(this.pesquisa.toLowerCase()) ||
+      a.codigo.toString().includes(this.pesquisa)
+    );
+  }
 
-    ||
+  limparFormulario() {
+    this.autor = {
+      id: '',
+      codigo: 0,
+      nome: '',
+      dataNascimento: '',
+      nacionalidade: ''
+    };
+  }
 
-    a.id.toString().includes(this.pesquisa)
-
-  );
-
-}
 }

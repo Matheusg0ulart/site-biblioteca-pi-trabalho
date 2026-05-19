@@ -1,5 +1,6 @@
 export interface Autor {
-  id: number;
+  id: any;
+  codigo: number;
   nome: string;
   dataNascimento: string;
   nacionalidade: string;

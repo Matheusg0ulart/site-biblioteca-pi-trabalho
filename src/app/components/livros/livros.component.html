@@ -1,177 +1,172 @@
-<div class="mb-3 mt-4">
-
-  <input
-    type="text"
-    class="form-control"
-    placeholder="Pesquisar livro..."
-    [(ngModel)]="pesquisa"
-    (input)="consultar()">
-
-</div>
-
 <div class="container mt-5">
-    <div class="card shadow p-4">
-        <div class="card">
 
-  <h2 class="mb-4">Cadastro de Livros</h2>
+  <div class="card">
 
-  <form>
+    <div *ngIf="modo == 'cadastrar' || editando">
 
-    <div class="mb-3">
+      <h2 class="mb-4">
+        {{ editando ? 'Editar Livro' : 'Cadastro de Livros' }}
+      </h2>
 
-      <label class="form-label">Título</label>
+      <form>
 
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="livro.titulo"
-        name="titulo">
+        <div class="mb-3">
+          <label class="form-label">Título</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="livro.titulo"
+            name="titulo">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Data Publicação</label>
+
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="livro.dataPublicacao"
+            name="dataPublicacao">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Editora</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="livro.editora"
+            name="editora">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Gênero</label>
+
+          <input
+            type="text"
+            class="form-control"
+            [(ngModel)]="livro.genero"
+            name="genero">
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Autor</label>
+
+          <select
+            class="form-select"
+            [(ngModel)]="livro.idAutor"
+            name="idAutor">
+
+            <option value="0">
+              Selecione um autor
+            </option>
+
+            <option
+              *ngFor="let autor of autores"
+              [value]="autor.id">
+
+              {{autor.nome}}
+
+            </option>
+
+          </select>
+        </div>
+
+        <button
+          *ngIf="!editando"
+          type="button"
+          class="btn btn-primary"
+          (click)="salvar()">
+
+          Salvar
+
+        </button>
+
+        <button
+          *ngIf="editando"
+          type="button"
+          class="btn btn-success"
+          (click)="atualizar()">
+
+          Atualizar
+
+        </button>
+
+      </form>
 
     </div>
 
-    <div class="mb-3">
+    <div *ngIf="modo == 'consultar' && !editando">
 
-      <label class="form-label">Data Publicação</label>
+      <h2 class="mb-4">Consultar Livros</h2>
 
-      <input
-        type="date"
-        class="form-control"
-        [(ngModel)]="livro.dataPublicacao"
-        name="dataPublicacao">
+      <div class="mb-3">
+
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Pesquisar livro por título ou código..."
+          [(ngModel)]="pesquisa"
+          (input)="consultar()">
+
+      </div>
+
+      <table class="table table-hover table-bordered align-middle">
+
+        <thead>
+
+          <tr>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Data</th>
+            <th>Editora</th>
+            <th>Gênero</th>
+            <th>Ações</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let l of livrosFiltrados">
+
+            <td>{{l.codigo}}</td>
+            <td>{{l.titulo}}</td>
+            <td>{{buscarAutor(l.idAutor)}}</td>
+            <td>{{l.dataPublicacao}}</td>
+            <td>{{l.editora}}</td>
+            <td>{{l.genero}}</td>
+
+            <td>
+
+              <button
+                class="btn btn-warning btn-sm me-2"
+                (click)="editar(l)">
+
+                Editar
+
+              </button>
+
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="excluir(l.id)">
+
+                Excluir
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
 
     </div>
 
-    <div class="mb-3">
+  </div>
 
-      <label class="form-label">Editora</label>
-
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="livro.editora"
-        name="editora">
-
-    </div>
-
-    <div class="mb-3">
-
-      <label class="form-label">Gênero</label>
-
-      <input
-        type="text"
-        class="form-control"
-        [(ngModel)]="livro.genero"
-        name="genero">
-
-    </div>
-
-    <div class="mb-3">
-
-      <label class="form-label">Autor</label>
-
-      <select
-        class="form-select"
-        [(ngModel)]="livro.idAutor"
-        name="idAutor">
-
-        <option
-          *ngFor="let autor of autores"
-          [value]="autor.id">
-
-          {{autor.nome}}
-
-        </option>
-
-      </select>
-
-    </div>
-
-    <button
-      *ngIf="!editando"
-      type="button"
-      class="btn btn-primary"
-      (click)="salvar()">
-
-      Salvar
-
-    </button>
-
-    <button
-      *ngIf="editando"
-      type="button"
-      class="btn btn-success"
-      (click)="atualizar()">
-
-      Atualizar
-
-    </button>
-
-  </form>
-
-  <hr>
-
-  <h3>Lista de Livros</h3>
-
-  <table class="table table-hover table-bordered align-middle">
-
-    <thead>
-
-      <tr>
-
-        <th>ID</th>
-        <th>Título</th>
-        <th>Autor</th>
-        <th>Data</th>
-        <th>Editora</th>
-        <th>Gênero</th>
-        <th>Ações</th>
-
-      </tr>
-
-    </thead>
-
-    <tbody>
-
-      <tr *ngFor="let l of livrosFiltrados">
-
-        <td>{{l.id}}</td>
-
-        <td>{{l.titulo}}</td>
-
-        <td>{{buscarAutor(l.idAutor)}}</td>
-
-        <td>{{l.dataPublicacao}}</td>
-
-        <td>{{l.editora}}</td>
-
-        <td>{{l.genero}}</td>
-
-        <td>
-
-          <button
-            class="btn btn-warning btn-sm me-2"
-            (click)="editar(l)">
-
-            Editar
-
-          </button>
-
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="excluir(l.id)">
-
-            Excluir
-
-          </button>
-
-        </td>
-
-      </tr>
-
-    </tbody>
-
-  </table>
-
-</div>
-</div>
 </div>

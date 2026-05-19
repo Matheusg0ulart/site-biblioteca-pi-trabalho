@@ -1,5 +1,6 @@
 export interface Livro {
-  id: number;
+  id: any;
+  codigo: number;
   idAutor: number;
   titulo: string;
   dataPublicacao: string;

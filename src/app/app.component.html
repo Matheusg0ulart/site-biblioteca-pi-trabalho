@@ -1,48 +1,71 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<div class="layout">
 
-  <div class="container-fluid">
+  <div class="sidebar" [class.fechar]="menuFechado">
 
-    <a class="navbar-brand fw-bold fs-3">
-      📚 Biblioteca
-    </a>
-
-    <div class="navbar-nav ms-auto">
-
-      <button
-        class="btn btn-outline-light me-2"
-        (click)="tela = 'autores'">
-
-        👨‍🏫 Autores
-
-      </button>
-
-      <button
-        class="btn btn-outline-light"
-        (click)="tela = 'livros'">
-
-        📖 Livros
-
-      </button>
-
+    <div class="logo">
+      <div class="icone-logo">📚</div>
+      <h2>Biblioteca</h2>
     </div>
+
+    <button class="menu-btn" (click)="tela = 'home'">
+      🏠 <span>Home</span>
+    </button>
+
+  <p class="menu-titulo">
+  <span class="icone">👨‍🏫</span>
+  <span class="texto-menu">Autores</span>
+</p>
+
+    <button class="menu-btn" (click)="tela = 'autores-cadastrar'">
+      ➕ <span>Cadastrar</span>
+    </button>
+
+    <button class="menu-btn" (click)="tela = 'autores-consultar'">
+      🔍 <span>Consultar</span>
+    </button>
+
+   <p class="menu-titulo">
+  <span class="icone">📖</span>
+  <span class="texto-menu">Livros</span>
+</p>
+
+    <button class="menu-btn" (click)="tela = 'livros-cadastrar'">
+      ➕ <span>Cadastrar</span>
+    </button>
+
+    <button class="menu-btn" (click)="tela = 'livros-consultar'">
+      🔍 <span>Consultar</span>
+    </button>
 
   </div>
 
-</nav>
+  <div class="conteudo" [class.expandido]="menuFechado">
 
-<div class="container text-center">
+    <div class="topbar">
+      <button class="hamburger" (click)="toggleMenu()">☰</button>
+      <h1>Sistema de Biblioteca</h1>
+    </div>
 
- 
-</div>
+    <div *ngIf="tela == 'home'">
+      <app-home></app-home>
+    </div>
 
-<div *ngIf="tela == 'autores'">
+    <div *ngIf="tela == 'autores-cadastrar'">
+      <app-autores modo="cadastrar"></app-autores>
+    </div>
 
-  <app-autores></app-autores>
+    <div *ngIf="tela == 'autores-consultar'">
+      <app-autores modo="consultar"></app-autores>
+    </div>
 
-</div>
+    <div *ngIf="tela == 'livros-cadastrar'">
+      <app-livros modo="cadastrar"></app-livros>
+    </div>
 
-<div *ngIf="tela == 'livros'">
+    <div *ngIf="tela == 'livros-consultar'">
+      <app-livros modo="consultar"></app-livros>
+    </div>
 
-  <app-livros></app-livros>
+  </div>
 
 </div>

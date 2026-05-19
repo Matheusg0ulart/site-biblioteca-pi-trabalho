@@ -1,40 +1,32 @@
 {
   "autores": [
     {
-      "id": 1,
-      "nome": "Machado de Assis",
-      "dataNascimento": "1839-06-21",
-      "nacionalidade": "Brasileiro"
-    },
-    {
-      "id": 2,
-      "nome": "matheus",
-      "dataNascimento": "2026-05-10",
-      "nacionalidade": "asdasd"
-    },
-    {
-      "id": 3,
+      "id": "QUYRfuvfLOw",
+      "codigo": 1,
       "nome": "lucas",
-      "dataNascimento": "2026-05-03",
+      "dataNascimento": "174747-04-07",
       "nacionalidade": "asdasd"
     }
   ],
   "livros": [
     {
-      "id": 1,
-      "idAutor": 1,
-      "titulo": "Dom Casmurro",
-      "dataPublicacao": "1899-01-01",
-      "editora": "Nova Fronteira",
-      "genero": "Romance"
+      "id": "j2_cMQm4m6E",
+      "codigo": 1,
+      "idAutor": "2",
+      "titulo": "sdasdasd",
+      "dataPublicacao": "1414-12-04",
+      "editora": "xzxas",
+      "genero": "asdasda"
     },
     {
-      "id": 2,
-      "idAutor": "1",
-      "titulo": "oiii",
-      "dataPublicacao": "1414-12-14",
-      "editora": "asdasd",
-      "genero": "asdasd"
+      "id": "Oi_5YwImMLk",
+      "codigo": 2,
+      "idAutor": "3",
+      "titulo": "sdasda",
+      "dataPublicacao": "",
+      "editora": "sadasdas",
+      "genero": "dasdasdasd"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

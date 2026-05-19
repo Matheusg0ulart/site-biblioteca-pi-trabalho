@@ -1,17 +1,33 @@
 import { Component } from '@angular/core';
-import { AutoresComponent } from './components/autores/autores.component';
-import { LivrosComponent } from './components/livros/livros.component';
+
 import { CommonModule } from '@angular/common';
 
+import { HomeComponent } from './components/home/home.component';
+
+import { AutoresComponent } from './components/autores/autores.component';
+
+import { LivrosComponent } from './components/livros/livros.component';
+
 @Component({
-  imports: [CommonModule,AutoresComponent, LivrosComponent],
   selector: 'app-root',
   standalone: true,
+  imports: [
+    CommonModule,
+    HomeComponent,
+    AutoresComponent,
+    LivrosComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
 
-  tela = 'autores';
+  tela = 'home';
+
+  menuFechado = false;
+
+  toggleMenu() {
+    this.menuFechado = !this.menuFechado;
+  }
 
 }

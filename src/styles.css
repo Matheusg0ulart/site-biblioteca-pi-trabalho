@@ -1,120 +1,179 @@
-body{
-    background-color: #eef2f7;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+*{
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-/* NAVBAR */
-
-.navbar{
-    background: #1e293b !important;
-    padding: 15px 30px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+body{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f1f5f9;
 }
 
-.navbar-brand{
+.layout{
+    display: flex;
+}
+
+.sidebar{
+    width: 260px;
+    height: 100vh;
+    background-color: #0f172a;
+    color: white;
+    padding: 30px 20px;
+    transition: 0.3s;
+    position: fixed;
+    overflow: hidden;
+}
+
+.sidebar.fechar{
+    width: 80px;
+    padding: 30px 10px;
+}
+
+.logo{
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.icone-logo{
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.logo h2{
     font-size: 28px;
+}
+
+.sidebar.fechar .logo h2{
+    display: none;
+}
+
+.sidebar.fechar .icone-logo{
+    font-size: 34px;
+}
+
+.menu-titulo{
+    margin: 25px 0 8px;
+    color: white;
     font-weight: bold;
-    color: white !important;
+    font-size: 18px;
 }
 
-/* CONTAINERS */
-
-.container{
-    margin-top: 30px;
+.menu-titulo .icone{
+    margin-right: 10px;
 }
 
-/* CARDS */
+.sidebar.fechar .menu-titulo{
+    display: flex;
+    justify-content: center;
+}
+
+.sidebar.fechar .menu-titulo .texto-menu{
+    display: none;
+}
+
+.sidebar.fechar .menu-titulo .icone{
+    margin-right: 0;
+}
+
+.menu-btn{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    color: white;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.2s;
+}
+
+.menu-btn:hover{
+    background-color: #1e293b;
+}
+
+.icone{
+    margin-right: 10px;
+}
+
+.sidebar.fechar .menu-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 0;
+    font-size: 22px;
+}
+
+.sidebar.fechar .menu-btn span:not(.icone){
+    display: none;
+}
+
+.sidebar.fechar .menu-btn .icone{
+    margin-right: 0;
+}
+
+.conteudo{
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    padding: 30px;
+    transition: 0.3s;
+}
+
+.conteudo.expandido{
+    margin-left: 80px;
+    width: calc(100% - 80px);
+}
+
+.topbar{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.topbar h1{
+    font-size: 42px;
+    color: #0f172a;
+}
+
+.hamburger{
+    border: none;
+    background-color: #0f172a;
+    color: white;
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    font-size: 28px;
+    cursor: pointer;
+}
 
 .card{
-    border: none;
-    border-radius: 18px;
-    padding: 25px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.08);
     background-color: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    border: none;
 }
-
-/* TITULOS */
-
-h1{
-    font-weight: bold;
-    color: #1e293b;
-}
-
-h2{
-    color: #334155;
-    font-weight: 700;
-    margin-bottom: 25px;
-}
-
-p{
-    color: #64748b;
-}
-
-/* INPUTS */
 
 .form-control,
 .form-select{
     border-radius: 10px;
     padding: 12px;
-    border: 1px solid #dbe1ea;
-    transition: 0.3s;
 }
-
-.form-control:focus,
-.form-select:focus{
-    border-color: #2563eb;
-    box-shadow: 0px 0px 8px rgba(37,99,235,0.3);
-}
-
-/* BOTÕES */
 
 .btn{
     border-radius: 10px;
-    padding: 10px 18px;
-    font-weight: 600;
 }
-
-.btn-primary{
-    background-color: #2563eb;
-    border: none;
-}
-
-.btn-success{
-    border: none;
-}
-
-.btn-warning{
-    color: white;
-}
-
-.btn:hover{
-    transform: translateY(-2px);
-    transition: 0.2s;
-}
-
-/* TABELAS */
 
 .table{
     margin-top: 20px;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
-    background-color: white;
 }
 
 .table thead{
-    background-color: #1e293b;
+    background-color: #0f172a;
     color: white;
-}
-
-.table tbody tr:hover{
-    background-color: #f1f5f9;
-    transition: 0.2s;
-}
-
-/* PESQUISA */
-
-input::placeholder{
-    color: #94a3b8;
 }

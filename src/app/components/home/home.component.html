@@ -1,73 +1,62 @@
 <div class="dashboard">
 
-  <!-- CARDS -->
+  <section class="welcome-panel">
+    <div>
+      <p class="section-kicker">Visao geral</p>
+      <h2>Painel da biblioteca</h2>
+      <span>Acompanhe o acervo, autores cadastrados e as entradas mais recentes.</span>
+    </div>
+  </section>
 
   <div class="cards-dashboard">
 
     <div class="dash-card autores-card">
-
       <div class="card-info">
-        <h3>Total de Autores</h3>
+        <span>Autores</span>
         <p>{{ totalAutores }}</p>
       </div>
-
-      <div class="card-icon">
-        👨‍🏫
-      </div>
-
+      <div class="card-icon">A</div>
     </div>
 
     <div class="dash-card livros-card">
-
       <div class="card-info">
-        <h3>Total de Livros</h3>
+        <span>Livros</span>
         <p>{{ totalLivros }}</p>
       </div>
-
-      <div class="card-icon">
-        📚
-      </div>
-
+      <div class="card-icon">L</div>
     </div>
 
   </div>
 
-  <!-- TABELA -->
-
   <div class="ultimos-livros">
 
     <div class="titulo-tabela">
-
-      <h2>Últimos livros cadastrados</h2>
-
+      <div>
+        <p class="section-kicker">Atualizacoes</p>
+        <h2>Ultimos livros cadastrados</h2>
+      </div>
     </div>
 
     <table class="table table-hover align-middle">
 
       <thead>
-
         <tr>
           <th>ID</th>
-          <th>Título</th>
+          <th>Titulo</th>
           <th>Editora</th>
-          <th>Gênero</th>
-          <th>Publicação</th>
+          <th>Genero</th>
+          <th>Publicacao</th>
         </tr>
-
       </thead>
 
       <tbody>
-
         <tr *ngFor="let livro of ultimosLivros">
-
           <td>{{ livro.id }}</td>
           <td>{{ livro.titulo }}</td>
           <td>{{ livro.editora }}</td>
           <td>{{ livro.genero }}</td>
           <td>{{ livro.dataPublicacao }}</td>
-
         </tr>
-
       </tbody>
 
     </table>

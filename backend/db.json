@@ -1,31 +1,22 @@
 {
   "autores": [
     {
-      "id": "QUYRfuvfLOw",
+      "id": 1,
       "codigo": 1,
-      "nome": "lucas",
-      "dataNascimento": "174747-04-07",
-      "nacionalidade": "asdasd"
+      "nome": "dasdasd",
+      "dataNascimento": "0115-12-15",
+      "nacionalidade": "asdasdas"
     }
   ],
   "livros": [
     {
-      "id": "j2_cMQm4m6E",
+      "id": 1,
       "codigo": 1,
-      "idAutor": "2",
-      "titulo": "sdasdasd",
-      "dataPublicacao": "1414-12-04",
-      "editora": "xzxas",
-      "genero": "asdasda"
-    },
-    {
-      "id": "Oi_5YwImMLk",
-      "codigo": 2,
-      "idAutor": "3",
-      "titulo": "sdasda",
-      "dataPublicacao": "",
-      "editora": "sadasdas",
-      "genero": "dasdasdasd"
+      "idAutor": 1,
+      "titulo": "lua",
+      "dataPublicacao": "5445-05-04",
+      "editora": "asdasd",
+      "genero": "asdasd"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

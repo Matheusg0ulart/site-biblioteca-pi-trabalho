@@ -1,5 +1,5 @@
 export interface Autor {
-  id: any;
+  id: number | string;
   codigo: number;
   nome: string;
   dataNascimento: string;

@@ -4,25 +4,27 @@
 
     <div *ngIf="modo == 'cadastrar' || editando">
 
-      <h2 class="mb-4">
-        {{ editando ? 'Editar Autor' : 'Cadastro de Autores' }}
-      </h2>
+      <div class="panel-heading">
+        <div>
+          <p>Autores</p>
+          <h2>{{ editando ? 'Editar autor' : 'Cadastro de autores' }}</h2>
+        </div>
+      </div>
 
       <form>
 
         <div class="mb-3">
           <label class="form-label">Nome</label>
-
           <input
             type="text"
             class="form-control"
+            placeholder="Ex: Machado de Assis"
             [(ngModel)]="autor.nome"
             name="nome">
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Data de Nascimento</label>
-
+          <label class="form-label">Data de nascimento</label>
           <input
             type="date"
             class="form-control"
@@ -30,12 +32,12 @@
             name="dataNascimento">
         </div>
 
-        <div class="mb-3">
+        <div class="mb-4">
           <label class="form-label">Nacionalidade</label>
-
           <input
             type="text"
             class="form-control"
+            placeholder="Ex: Brasileira"
             [(ngModel)]="autor.nacionalidade"
             name="nacionalidade">
         </div>
@@ -45,9 +47,7 @@
           type="button"
           class="btn btn-primary"
           (click)="salvar()">
-
-          Salvar
-
+          Salvar autor
         </button>
 
         <button
@@ -55,9 +55,7 @@
           type="button"
           class="btn btn-success"
           (click)="atualizar()">
-
-          Atualizar
-
+          Atualizar autor
         </button>
 
       </form>
@@ -66,64 +64,49 @@
 
     <div *ngIf="modo == 'consultar' && !editando">
 
-      <h2 class="mb-4">Consultar Autores</h2>
+      <div class="panel-heading">
+        <div>
+          <p>Autores</p>
+          <h2>Consultar autores</h2>
+        </div>
+      </div>
 
-      <div class="mb-3">
-
+      <div class="search-box">
         <input
           type="text"
           class="form-control"
-          placeholder="Pesquisar autor por nome ou código..."
+          placeholder="Pesquisar por nome ou codigo..."
           [(ngModel)]="pesquisa"
           (input)="consultar()">
-
       </div>
 
       <table class="table table-hover table-bordered align-middle">
 
         <thead>
-
           <tr>
-            <th>Código</th>
+            <th>Codigo</th>
             <th>Nome</th>
-            <th>Data Nascimento</th>
+            <th>Data nascimento</th>
             <th>Nacionalidade</th>
-            <th>Ações</th>
+            <th>Acoes</th>
           </tr>
-
         </thead>
 
         <tbody>
-
           <tr *ngFor="let a of autoresFiltrados">
-
             <td>{{a.codigo}}</td>
             <td>{{a.nome}}</td>
             <td>{{a.dataNascimento}}</td>
             <td>{{a.nacionalidade}}</td>
-
             <td>
-
-              <button
-                class="btn btn-warning btn-sm me-2"
-                (click)="editar(a)">
-
+              <button class="btn btn-warning btn-sm me-2" (click)="editar(a)">
                 Editar
-
               </button>
-
-              <button
-                class="btn btn-danger btn-sm"
-                (click)="excluir(a.id)">
-
+              <button class="btn btn-danger btn-sm" (click)="abrirConfirmacaoExclusao(a)">
                 Excluir
-
               </button>
-
             </td>
-
           </tr>
-
         </tbody>
 
       </table>
@@ -132,4 +115,28 @@
 
   </div>
 
+</div>
+
+<div class="modal-overlay" *ngIf="autorParaExcluir">
+  <div class="confirm-modal">
+    <div class="modal-icon">!</div>
+
+    <div class="modal-content-text">
+      <p class="modal-kicker">Confirmar exclusao</p>
+      <h3>Excluir autor?</h3>
+      <span>
+        O autor <strong>{{ autorParaExcluir.nome }}</strong> sera removido do sistema.
+        Essa acao nao pode ser desfeita.
+      </span>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-light" (click)="cancelarExclusao()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-danger" (click)="confirmarExclusao()">
+        Sim, excluir
+      </button>
+    </div>
+  </div>
 </div>

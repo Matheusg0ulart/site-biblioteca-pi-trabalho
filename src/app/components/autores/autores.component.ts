@@ -21,9 +21,10 @@ export class AutoresComponent implements OnInit {
 
   editando = false;
   pesquisa = '';
+  autorParaExcluir: Autor | null = null;
 
   autor: Autor = {
-    id: '',
+    id: 0,
     codigo: 0,
     nome: '',
     dataNascimento: '',
@@ -48,8 +49,11 @@ export class AutoresComponent implements OnInit {
       ? Math.max(...this.autores.map(a => a.codigo || 0))
       : 0;
 
+    const maiorId = this.maiorIdNumerico();
+
     const novoAutor: Autor = {
       ...this.autor,
+      id: maiorId + 1,
       codigo: maiorCodigo + 1
     };
 
@@ -59,8 +63,21 @@ export class AutoresComponent implements OnInit {
     });
   }
 
-  excluir(id: any) {
-    this.autorService.excluir(id).subscribe(() => {
+  abrirConfirmacaoExclusao(autor: Autor) {
+    this.autorParaExcluir = autor;
+  }
+
+  cancelarExclusao() {
+    this.autorParaExcluir = null;
+  }
+
+  confirmarExclusao() {
+    if (!this.autorParaExcluir) {
+      return;
+    }
+
+    this.autorService.excluir(this.autorParaExcluir.id).subscribe(() => {
+      this.autorParaExcluir = null;
       this.listarAutores();
     });
   }
@@ -87,12 +104,24 @@ export class AutoresComponent implements OnInit {
 
   limparFormulario() {
     this.autor = {
-      id: '',
+      id: 0,
       codigo: 0,
       nome: '',
       dataNascimento: '',
       nacionalidade: ''
     };
+  }
+
+  maiorIdNumerico(): number {
+    const idsNumericos = this.autores
+      .map(a => Number(a.id))
+      .filter(id => Number.isInteger(id) && id > 0);
+
+    const codigos = this.autores
+      .map(a => a.codigo || 0)
+      .filter(codigo => codigo > 0);
+
+    return Math.max(0, ...idsNumericos, ...codigos);
   }
 
 }

@@ -1,7 +1,7 @@
 export interface Livro {
-  id: any;
+  id: number | string;
   codigo: number;
-  idAutor: number;
+  idAutor: number | string;
   titulo: string;
   dataPublicacao: string;
   editora: string;

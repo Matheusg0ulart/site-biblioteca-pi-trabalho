@@ -25,9 +25,10 @@ export class LivrosComponent implements OnInit {
 
   pesquisa = '';
   editando = false;
+  livroParaExcluir: Livro | null = null;
 
   livro: Livro = {
-    id: '',
+    id: 0,
     codigo: 0,
     idAutor: 0,
     titulo: '',
@@ -64,8 +65,11 @@ export class LivrosComponent implements OnInit {
       ? Math.max(...this.livros.map(l => l.codigo || 0))
       : 0;
 
+    const maiorId = this.maiorIdNumerico();
+
     const novoLivro: Livro = {
       ...this.livro,
+      id: maiorId + 1,
       codigo: maiorCodigo + 1
     };
 
@@ -75,8 +79,21 @@ export class LivrosComponent implements OnInit {
     });
   }
 
-  excluir(id: any) {
-    this.livroService.excluir(id).subscribe(() => {
+  abrirConfirmacaoExclusao(livro: Livro) {
+    this.livroParaExcluir = livro;
+  }
+
+  cancelarExclusao() {
+    this.livroParaExcluir = null;
+  }
+
+  confirmarExclusao() {
+    if (!this.livroParaExcluir) {
+      return;
+    }
+
+    this.livroService.excluir(this.livroParaExcluir.id).subscribe(() => {
+      this.livroParaExcluir = null;
       this.listarLivros();
     });
   }
@@ -101,14 +118,14 @@ export class LivrosComponent implements OnInit {
     );
   }
 
-  buscarAutor(idAutor: number): string {
+  buscarAutor(idAutor: number | string): string {
     const autor = this.autores.find(a => a.id == idAutor);
     return autor ? autor.nome : '';
   }
 
   limparFormulario() {
     this.livro = {
-      id: '',
+      id: 0,
       codigo: 0,
       idAutor: 0,
       titulo: '',
@@ -116,6 +133,18 @@ export class LivrosComponent implements OnInit {
       editora: '',
       genero: ''
     };
+  }
+
+  maiorIdNumerico(): number {
+    const idsNumericos = this.livros
+      .map(l => Number(l.id))
+      .filter(id => Number.isInteger(id) && id > 0);
+
+    const codigos = this.livros
+      .map(l => l.codigo || 0)
+      .filter(codigo => codigo > 0);
+
+    return Math.max(0, ...idsNumericos, ...codigos);
   }
 
 }

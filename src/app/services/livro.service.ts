@@ -21,11 +21,11 @@ export class LivroService {
     return this.http.post<Livro>(this.api, livro);
   }
 
-  excluir(id: number) {
+  excluir(id: number | string) {
     return this.http.delete(`${this.api}/${id}`);
   }
 
-  atualizar(id: number, livro: Livro): Observable<Livro> {
+  atualizar(id: number | string, livro: Livro): Observable<Livro> {
     return this.http.put<Livro>(`${this.api}/${id}`, livro);
   }
 

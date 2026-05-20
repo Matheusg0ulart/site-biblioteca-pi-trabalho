@@ -20,10 +20,10 @@ export class AutorService {
   criar(autor: Autor): Observable<Autor> {
   return this.http.post<Autor>(this.api, autor);
 }
-  excluir(id: number) {
+  excluir(id: number | string) {
   return this.http.delete(`${this.api}/${id}`);
 }
-atualizar(id: number, autor: Autor): Observable<Autor> {
+atualizar(id: number | string, autor: Autor): Observable<Autor> {
   return this.http.put<Autor>(`${this.api}/${id}`, autor);
 }
 }

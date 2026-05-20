@@ -1,71 +1,77 @@
 <div class="layout">
 
-  <div class="sidebar" [class.fechar]="menuFechado">
+  <aside class="sidebar" [class.fechar]="menuFechado">
 
-    <div class="logo">
-      <div class="icone-logo">📚</div>
-      <h2>Biblioteca</h2>
+    <div class="brand">
+      <div class="brand-mark">B</div>
+      <div class="brand-copy">
+        <span>Biblioteca</span>
+        <small>Gestao de acervo</small>
+      </div>
     </div>
 
-    <button class="menu-btn" (click)="tela = 'home'">
-      🏠 <span>Home</span>
-    </button>
+    <nav class="menu">
+      <button class="menu-btn" [class.active]="tela == 'home'" (click)="tela = 'home'">
+        <span class="menu-icon">H</span>
+        <span>Home</span>
+      </button>
 
-  <p class="menu-titulo">
-  <span class="icone">👨‍🏫</span>
-  <span class="texto-menu">Autores</span>
-</p>
+      <p class="menu-titulo">
+        <span class="menu-icon">A</span>
+        <span class="texto-menu">Autores</span>
+      </p>
 
-    <button class="menu-btn" (click)="tela = 'autores-cadastrar'">
-      ➕ <span>Cadastrar</span>
-    </button>
+      <button class="menu-btn" [class.active]="tela == 'autores-cadastrar'" (click)="tela = 'autores-cadastrar'">
+        <span class="menu-icon">+</span>
+        <span>Cadastrar</span>
+      </button>
 
-    <button class="menu-btn" (click)="tela = 'autores-consultar'">
-      🔍 <span>Consultar</span>
-    </button>
+      <button class="menu-btn" [class.active]="tela == 'autores-consultar'" (click)="tela = 'autores-consultar'">
+        <span class="menu-icon">?</span>
+        <span>Consultar</span>
+      </button>
 
-   <p class="menu-titulo">
-  <span class="icone">📖</span>
-  <span class="texto-menu">Livros</span>
-</p>
+      <p class="menu-titulo">
+        <span class="menu-icon">L</span>
+        <span class="texto-menu">Livros</span>
+      </p>
 
-    <button class="menu-btn" (click)="tela = 'livros-cadastrar'">
-      ➕ <span>Cadastrar</span>
-    </button>
+      <button class="menu-btn" [class.active]="tela == 'livros-cadastrar'" (click)="tela = 'livros-cadastrar'">
+        <span class="menu-icon">+</span>
+        <span>Cadastrar</span>
+      </button>
 
-    <button class="menu-btn" (click)="tela = 'livros-consultar'">
-      🔍 <span>Consultar</span>
-    </button>
+      <button class="menu-btn" [class.active]="tela == 'livros-consultar'" (click)="tela = 'livros-consultar'">
+        <span class="menu-icon">?</span>
+        <span>Consultar</span>
+      </button>
+    </nav>
 
-  </div>
+  </aside>
 
-  <div class="conteudo" [class.expandido]="menuFechado">
+  <main class="conteudo" [class.expandido]="menuFechado">
 
-    <div class="topbar">
-      <button class="hamburger" (click)="toggleMenu()">☰</button>
-      <h1>Sistema de Biblioteca</h1>
-    </div>
+    <header class="topbar">
+      <button class="hamburger" type="button" (click)="toggleMenu()" aria-label="Alternar menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
-    <div *ngIf="tela == 'home'">
-      <app-home></app-home>
-    </div>
+      <div>
+        <p class="page-kicker">Sistema administrativo</p>
+        <h1>Biblioteca</h1>
+      </div>
+    </header>
 
-    <div *ngIf="tela == 'autores-cadastrar'">
-      <app-autores modo="cadastrar"></app-autores>
-    </div>
+    <section class="page-shell">
+      <app-home *ngIf="tela == 'home'"></app-home>
+      <app-autores *ngIf="tela == 'autores-cadastrar'" modo="cadastrar"></app-autores>
+      <app-autores *ngIf="tela == 'autores-consultar'" modo="consultar"></app-autores>
+      <app-livros *ngIf="tela == 'livros-cadastrar'" modo="cadastrar"></app-livros>
+      <app-livros *ngIf="tela == 'livros-consultar'" modo="consultar"></app-livros>
+    </section>
 
-    <div *ngIf="tela == 'autores-consultar'">
-      <app-autores modo="consultar"></app-autores>
-    </div>
-
-    <div *ngIf="tela == 'livros-cadastrar'">
-      <app-livros modo="cadastrar"></app-livros>
-    </div>
-
-    <div *ngIf="tela == 'livros-consultar'">
-      <app-livros modo="consultar"></app-livros>
-    </div>
-
-  </div>
+  </main>
 
 </div>

@@ -2,9 +2,9 @@
 
   <section class="welcome-panel">
     <div>
-      <p class="section-kicker">Visao geral</p>
+      <p class="section-kicker">Visão geral</p>
       <h2>Painel da biblioteca</h2>
-      <span>Acompanhe o acervo, autores cadastrados e as entradas mais recentes.</span>
+      <span>Acompanhe acervo, clientes, locações e os livros alugados por autor.</span>
     </div>
   </section>
 
@@ -26,40 +26,85 @@
       <div class="card-icon">L</div>
     </div>
 
+    <div class="dash-card clientes-card">
+      <div class="card-info">
+        <span>Clientes</span>
+        <p>{{ totalClientes }}</p>
+      </div>
+      <div class="card-icon">C</div>
+    </div>
+
+    <div class="dash-card locacoes-card">
+      <div class="card-info">
+        <span>Locações</span>
+        <p>{{ totalLocacoes }}</p>
+      </div>
+      <div class="card-icon">R</div>
+    </div>
+
   </div>
 
-  <div class="ultimos-livros">
+  <div class="metric-strip">
+    <div>
+      <span>Locações ativas</span>
+      <strong>{{ locacoesAtivas }}</strong>
+    </div>
+    <div>
+      <span>Livros disponíveis</span>
+      <strong>{{ livrosDisponiveis }}</strong>
+    </div>
+    <div>
+      <span>Locações atrasadas</span>
+      <strong>{{ locacoesAtrasadas }}</strong>
+    </div>
+  </div>
+
+  <div class="ultimos-livros locacoes-home">
 
     <div class="titulo-tabela">
       <div>
-        <p class="section-kicker">Atualizacoes</p>
-        <h2>Ultimos livros cadastrados</h2>
+        <p class="section-kicker">Locações</p>
+        <h2>Quem está com cada livro</h2>
       </div>
     </div>
 
-    <table class="table table-hover align-middle">
+    <div class="empty-state" *ngIf="locacoesResumo.length == 0">
+      Nenhuma locação cadastrada ainda.
+    </div>
 
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Titulo</th>
-          <th>Editora</th>
-          <th>Genero</th>
-          <th>Publicacao</th>
-        </tr>
-      </thead>
+    <div class="table-responsive" *ngIf="locacoesResumo.length > 0">
+      <table class="table table-hover align-middle">
 
-      <tbody>
-        <tr *ngFor="let livro of ultimosLivros">
-          <td>{{ livro.id }}</td>
-          <td>{{ livro.titulo }}</td>
-          <td>{{ livro.editora }}</td>
-          <td>{{ livro.genero }}</td>
-          <td>{{ livro.dataPublicacao }}</td>
-        </tr>
-      </tbody>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Cliente</th>
+            <th>Livro</th>
+            <th>Autor</th>
+            <th>Locação</th>
+            <th>Devolução</th>
+            <th>Status</th>
+          </tr>
+        </thead>
 
-    </table>
+        <tbody>
+          <tr *ngFor="let locacao of locacoesResumo">
+            <td>{{ locacao.codigo }}</td>
+            <td>{{ locacao.cliente }}</td>
+            <td>{{ locacao.livro }}</td>
+            <td>{{ locacao.autor }}</td>
+            <td>{{ formatarData(locacao.dataLocacao) }}</td>
+            <td>{{ formatarData(locacao.dataDevolucao) }}</td>
+            <td>
+              <span class="status-pill" [class.devolvido]="locacao.status == 'Devolvido'" [class.atrasado]="locacao.status == 'Atrasado'">
+                {{ locacao.status }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+    </div>
 
   </div>
 

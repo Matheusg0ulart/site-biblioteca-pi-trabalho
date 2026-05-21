@@ -1,20 +1,32 @@
 <div class="container mt-5">
 
   <div class="card">
+    <div class="sucesso-form" *ngIf="mensagemSucesso">
+      {{ mensagemSucesso }}
+    </div>
+    <div class="erro-form" *ngIf="mensagemErro && !mostrandoFormulario">
+      {{ mensagemErro }}
+    </div>
 
-    <div *ngIf="modo == 'cadastrar' || editando">
+    <div *ngIf="modo == 'cadastrar' || editando || mostrandoFormulario">
 
       <div class="panel-heading">
         <div>
           <p>Livros</p>
           <h2>{{ editando ? 'Editar livro' : 'Cadastro de livros' }}</h2>
         </div>
+        <button type="button" class="btn btn-light" *ngIf="modo == 'gerenciar'" (click)="cancelarFormulario()">
+          Cancelar
+        </button>
       </div>
 
       <form>
+        <div class="erro-form" *ngIf="mensagemErro">
+          {{ mensagemErro }}
+        </div>
 
         <div class="mb-3">
-          <label class="form-label">Titulo</label>
+          <label class="form-label">Título</label>
           <input
             type="text"
             class="form-control"
@@ -24,7 +36,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Data de publicacao</label>
+          <label class="form-label">Data de publicação</label>
           <input
             type="date"
             class="form-control"
@@ -43,7 +55,7 @@
         </div>
 
         <div class="mb-3">
-          <label class="form-label">Genero</label>
+          <label class="form-label">Gênero</label>
           <input
             type="text"
             class="form-control"
@@ -67,40 +79,49 @@
           </select>
         </div>
 
-        <button
-          *ngIf="!editando"
-          type="button"
-          class="btn btn-primary"
-          (click)="salvar()">
-          Salvar livro
-        </button>
+        <div class="form-actions">
+          <button
+            *ngIf="!editando"
+            type="button"
+            class="btn btn-primary"
+            (click)="salvar()">
+            Salvar livro
+          </button>
 
-        <button
-          *ngIf="editando"
-          type="button"
-          class="btn btn-success"
-          (click)="atualizar()">
-          Atualizar livro
-        </button>
+          <button
+            *ngIf="editando"
+            type="button"
+            class="btn btn-success"
+            (click)="atualizar()">
+            Atualizar livro
+          </button>
+
+          <button type="button" class="btn btn-light" *ngIf="modo == 'gerenciar'" (click)="cancelarFormulario()">
+            Voltar
+          </button>
+        </div>
 
       </form>
 
     </div>
 
-    <div *ngIf="modo == 'consultar' && !editando">
+    <div *ngIf="(modo == 'consultar' || modo == 'gerenciar') && !editando && !mostrandoFormulario">
 
       <div class="panel-heading">
         <div>
           <p>Livros</p>
-          <h2>Consultar livros</h2>
+          <h2>Livros cadastrados</h2>
         </div>
+        <button type="button" class="btn btn-primary" (click)="novo()">
+          Novo livro
+        </button>
       </div>
 
       <div class="search-box">
         <input
           type="text"
           class="form-control"
-          placeholder="Pesquisar por titulo ou codigo..."
+          placeholder="Pesquisar por título ou código..."
           [(ngModel)]="pesquisa"
           (input)="consultar()">
       </div>
@@ -109,13 +130,14 @@
 
         <thead>
           <tr>
-            <th>Codigo</th>
-            <th>Titulo</th>
+            <th>Código</th>
+            <th>Título</th>
             <th>Autor</th>
             <th>Data</th>
             <th>Editora</th>
-            <th>Genero</th>
-            <th>Acoes</th>
+            <th>Gênero</th>
+            <th>Status</th>
+            <th>Ações</th>
           </tr>
         </thead>
 
@@ -124,9 +146,14 @@
             <td>{{l.codigo}}</td>
             <td>{{l.titulo}}</td>
             <td>{{buscarAutor(l.idAutor)}}</td>
-            <td>{{l.dataPublicacao}}</td>
+            <td>{{formatarData(l.dataPublicacao)}}</td>
             <td>{{l.editora}}</td>
             <td>{{l.genero}}</td>
+            <td>
+              <span class="status-pill" [class.devolvido]="statusLivro(l.id) == 'Disponível'" [class.atrasado]="statusLivro(l.id) == 'Atrasado'">
+                {{statusLivro(l.id)}}
+              </span>
+            </td>
             <td>
               <button class="btn btn-warning btn-sm me-2" (click)="editar(l)">
                 Editar
@@ -151,11 +178,11 @@
     <div class="modal-icon">!</div>
 
     <div class="modal-content-text">
-      <p class="modal-kicker">Confirmar exclusao</p>
+      <p class="modal-kicker">Confirmar exclusão</p>
       <h3>Excluir livro?</h3>
       <span>
-        O livro <strong>{{ livroParaExcluir.titulo }}</strong> sera removido do acervo.
-        Essa acao nao pode ser desfeita.
+        O livro <strong>{{ livroParaExcluir.titulo }}</strong> será removido do acervo.
+        Essa ação não pode ser desfeita.
       </span>
     </div>
 

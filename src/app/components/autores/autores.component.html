@@ -1,17 +1,29 @@
 <div class="container mt-5">
 
   <div class="card">
+    <div class="sucesso-form" *ngIf="mensagemSucesso">
+      {{ mensagemSucesso }}
+    </div>
+    <div class="erro-form" *ngIf="mensagemErro && !mostrandoFormulario">
+      {{ mensagemErro }}
+    </div>
 
-    <div *ngIf="modo == 'cadastrar' || editando">
+    <div *ngIf="modo == 'cadastrar' || editando || mostrandoFormulario">
 
       <div class="panel-heading">
         <div>
           <p>Autores</p>
           <h2>{{ editando ? 'Editar autor' : 'Cadastro de autores' }}</h2>
         </div>
+        <button type="button" class="btn btn-light" *ngIf="modo == 'gerenciar'" (click)="cancelarFormulario()">
+          Cancelar
+        </button>
       </div>
 
       <form>
+        <div class="erro-form" *ngIf="mensagemErro">
+          {{ mensagemErro }}
+        </div>
 
         <div class="mb-3">
           <label class="form-label">Nome</label>
@@ -42,40 +54,49 @@
             name="nacionalidade">
         </div>
 
-        <button
-          *ngIf="!editando"
-          type="button"
-          class="btn btn-primary"
-          (click)="salvar()">
-          Salvar autor
-        </button>
+        <div class="form-actions">
+          <button
+            *ngIf="!editando"
+            type="button"
+            class="btn btn-primary"
+            (click)="salvar()">
+            Salvar autor
+          </button>
 
-        <button
-          *ngIf="editando"
-          type="button"
-          class="btn btn-success"
-          (click)="atualizar()">
-          Atualizar autor
-        </button>
+          <button
+            *ngIf="editando"
+            type="button"
+            class="btn btn-success"
+            (click)="atualizar()">
+            Atualizar autor
+          </button>
+
+          <button type="button" class="btn btn-light" *ngIf="modo == 'gerenciar'" (click)="cancelarFormulario()">
+            Voltar
+          </button>
+        </div>
 
       </form>
 
     </div>
 
-    <div *ngIf="modo == 'consultar' && !editando">
+    <div *ngIf="(modo == 'consultar' || modo == 'gerenciar') && !editando && !mostrandoFormulario">
 
       <div class="panel-heading">
         <div>
           <p>Autores</p>
-          <h2>Consultar autores</h2>
+          <h2>Autores cadastrados</h2>
         </div>
+        <button type="button" class="btn btn-primary" (click)="novo()">
+          Novo autor
+        </button>
       </div>
 
       <div class="search-box">
         <input
           type="text"
           class="form-control"
-          placeholder="Pesquisar por nome ou codigo..."
+          placeholder="Pesquisar por nome ou código..."
           [(ngModel)]="pesquisa"
           (input)="consultar()">
       </div>
@@ -84,11 +105,11 @@
 
         <thead>
           <tr>
-            <th>Codigo</th>
+            <th>Código</th>
             <th>Nome</th>
             <th>Data nascimento</th>
             <th>Nacionalidade</th>
-            <th>Acoes</th>
+            <th>Ações</th>
           </tr>
         </thead>
 
@@ -96,7 +117,7 @@
           <tr *ngFor="let a of autoresFiltrados">
             <td>{{a.codigo}}</td>
             <td>{{a.nome}}</td>
-            <td>{{a.dataNascimento}}</td>
+            <td>{{formatarData(a.dataNascimento)}}</td>
             <td>{{a.nacionalidade}}</td>
             <td>
               <button class="btn btn-warning btn-sm me-2" (click)="editar(a)">
@@ -122,11 +143,11 @@
     <div class="modal-icon">!</div>
 
     <div class="modal-content-text">
-      <p class="modal-kicker">Confirmar exclusao</p>
+      <p class="modal-kicker">Confirmar exclusão</p>
       <h3>Excluir autor?</h3>
       <span>
-        O autor <strong>{{ autorParaExcluir.nome }}</strong> sera removido do sistema.
-        Essa acao nao pode ser desfeita.
+        O autor <strong>{{ autorParaExcluir.nome }}</strong> será removido do sistema.
+        Essa ação não pode ser desfeita.
       </span>
     </div>
 

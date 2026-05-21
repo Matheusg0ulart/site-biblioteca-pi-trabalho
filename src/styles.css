@@ -40,11 +40,21 @@ body {
   z-index: 10;
   width: 280px;
   padding: 24px 18px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   color: #fff;
   background: linear-gradient(180deg, var(--sidebar) 0%, #0b1220 100%);
   box-shadow: 18px 0 45px rgba(15, 23, 42, 0.18);
   transition: width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .sidebar.fechar {
@@ -57,7 +67,7 @@ body {
   align-items: center;
   gap: 12px;
   min-height: 58px;
-  margin-bottom: 34px;
+  margin-bottom: 22px;
 }
 
 .brand-mark,
@@ -104,14 +114,14 @@ body {
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .menu-titulo {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin: 22px 10px 6px;
+  margin: 16px 10px 4px;
   color: #a7b2c5;
   font-size: 12px;
   font-weight: 800;
@@ -124,14 +134,14 @@ body {
   align-items: center;
   gap: 12px;
   width: 100%;
-  min-height: 48px;
+  min-height: 46px;
   border: 1px solid transparent;
-  border-radius: 14px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 10px 13px;
   background: transparent;
   color: #d8dee9;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   text-align: left;
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
@@ -149,8 +159,8 @@ body {
 }
 
 .menu-icon {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 9px;
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
@@ -235,7 +245,18 @@ body {
 
 .page-shell {
   width: 100%;
-  max-width: 1220px;
+  max-width: 1380px;
+}
+
+.app-footer {
+  width: 100%;
+  max-width: 1380px;
+  margin-top: 24px;
+  padding: 18px 4px 4px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .container {
@@ -277,6 +298,10 @@ body {
   border-bottom: 1px solid var(--line);
 }
 
+.panel-heading .btn {
+  flex: 0 0 auto;
+}
+
 .panel-heading p {
   margin-bottom: 6px;
   color: var(--muted);
@@ -292,7 +317,13 @@ body {
 }
 
 form {
-  max-width: 760px;
+  max-width: 980px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 18px;
 }
 
 .form-label {
@@ -345,6 +376,11 @@ form {
   background: var(--danger);
 }
 
+.btn-info {
+  background: #0891b2;
+  color: #fff;
+}
+
 .table {
   margin: 18px 0 0;
   overflow: hidden;
@@ -352,6 +388,11 @@ form {
   border-radius: 14px;
   background: #fff;
   font-size: 14px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
 }
 
 .table > :not(caption) > * > * {
@@ -455,6 +496,58 @@ form {
   color: var(--text);
 }
 
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.erro-form {
+  margin-bottom: 18px;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.sucesso-form {
+  margin-bottom: 18px;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f0fdf4;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+  border-radius: 999px;
+  padding: 4px 12px;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.status-pill.devolvido {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pill.atrasado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
 @keyframes modalIn {
   from {
     opacity: 0;
@@ -552,11 +645,24 @@ form {
     white-space: nowrap;
   }
 
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
   .modal-actions {
     flex-direction: column-reverse;
   }
 
   .modal-actions .btn {
+    width: 100%;
+  }
+
+  .panel-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .panel-heading .btn {
     width: 100%;
   }
 }

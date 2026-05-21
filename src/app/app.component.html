@@ -6,7 +6,7 @@
       <div class="brand-mark">B</div>
       <div class="brand-copy">
         <span>Biblioteca</span>
-        <small>Gestao de acervo</small>
+        <small>Gestão de acervo</small>
       </div>
     </div>
 
@@ -16,34 +16,24 @@
         <span>Home</span>
       </button>
 
-      <p class="menu-titulo">
+      <button class="menu-btn" [class.active]="tela == 'autores'" (click)="tela = 'autores'">
         <span class="menu-icon">A</span>
-        <span class="texto-menu">Autores</span>
-      </p>
-
-      <button class="menu-btn" [class.active]="tela == 'autores-cadastrar'" (click)="tela = 'autores-cadastrar'">
-        <span class="menu-icon">+</span>
-        <span>Cadastrar</span>
+        <span>Autores</span>
       </button>
 
-      <button class="menu-btn" [class.active]="tela == 'autores-consultar'" (click)="tela = 'autores-consultar'">
-        <span class="menu-icon">?</span>
-        <span>Consultar</span>
-      </button>
-
-      <p class="menu-titulo">
+      <button class="menu-btn" [class.active]="tela == 'livros'" (click)="tela = 'livros'">
         <span class="menu-icon">L</span>
-        <span class="texto-menu">Livros</span>
-      </p>
-
-      <button class="menu-btn" [class.active]="tela == 'livros-cadastrar'" (click)="tela = 'livros-cadastrar'">
-        <span class="menu-icon">+</span>
-        <span>Cadastrar</span>
+        <span>Livros</span>
       </button>
 
-      <button class="menu-btn" [class.active]="tela == 'livros-consultar'" (click)="tela = 'livros-consultar'">
-        <span class="menu-icon">?</span>
-        <span>Consultar</span>
+      <button class="menu-btn" [class.active]="tela == 'clientes'" (click)="tela = 'clientes'">
+        <span class="menu-icon">C</span>
+        <span>Clientes</span>
+      </button>
+
+      <button class="menu-btn" [class.active]="tela == 'locacoes'" (click)="clienteFiltroLocacoes = 0; tela = 'locacoes'">
+        <span class="menu-icon">R</span>
+        <span>Locações</span>
       </button>
     </nav>
 
@@ -60,17 +50,29 @@
 
       <div>
         <p class="page-kicker">Sistema administrativo</p>
-        <h1>Biblioteca</h1>
+        <h1>{{ tituloPagina }}</h1>
       </div>
     </header>
 
     <section class="page-shell">
       <app-home *ngIf="tela == 'home'"></app-home>
-      <app-autores *ngIf="tela == 'autores-cadastrar'" modo="cadastrar"></app-autores>
-      <app-autores *ngIf="tela == 'autores-consultar'" modo="consultar"></app-autores>
-      <app-livros *ngIf="tela == 'livros-cadastrar'" modo="cadastrar"></app-livros>
-      <app-livros *ngIf="tela == 'livros-consultar'" modo="consultar"></app-livros>
+      <app-autores *ngIf="tela == 'autores'" modo="gerenciar"></app-autores>
+      <app-livros *ngIf="tela == 'livros'" modo="gerenciar"></app-livros>
+      <app-clientes
+        *ngIf="tela == 'clientes'"
+        modo="gerenciar"
+        [abrirLocacoesCliente]="abrirLocacoesDoCliente.bind(this)">
+      </app-clientes>
+      <app-locacoes
+        *ngIf="tela == 'locacoes'"
+        modo="gerenciar"
+        [clienteFiltroId]="clienteFiltroLocacoes">
+      </app-locacoes>
     </section>
+
+    <footer class="app-footer">
+      Sistema de Biblioteca - Projeto Integrador | Feito por Matheus Goulart e Erick Santos Silva
+    </footer>
 
   </main>
 

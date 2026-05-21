@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { Autor } from '../../models/autor';
 import { AutorService } from '../../services/autor.service';
+import { Livro } from '../../models/livro';
+import { LivroService } from '../../services/livro.service';
 
 @Component({
   selector: 'app-autores',
@@ -18,9 +20,13 @@ export class AutoresComponent implements OnInit {
 
   autores: Autor[] = [];
   autoresFiltrados: Autor[] = [];
+  livros: Livro[] = [];
 
   editando = false;
+  mostrandoFormulario = false;
   pesquisa = '';
+  mensagemErro = '';
+  mensagemSucesso = '';
   autorParaExcluir: Autor | null = null;
 
   autor: Autor = {
@@ -31,10 +37,14 @@ export class AutoresComponent implements OnInit {
     nacionalidade: ''
   };
 
-  constructor(private autorService: AutorService) {}
+  constructor(
+    private autorService: AutorService,
+    private livroService: LivroService
+  ) {}
 
   ngOnInit(): void {
     this.listarAutores();
+    this.listarLivros();
   }
 
   listarAutores() {
@@ -45,6 +55,10 @@ export class AutoresComponent implements OnInit {
   }
 
   salvar() {
+    if (!this.formularioValido()) {
+      return;
+    }
+
     const maiorCodigo = this.autores.length > 0
       ? Math.max(...this.autores.map(a => a.codigo || 0))
       : 0;
@@ -59,8 +73,31 @@ export class AutoresComponent implements OnInit {
 
     this.autorService.criar(novoAutor).subscribe(() => {
       this.limparFormulario();
+      this.mostrandoFormulario = false;
+      this.mostrarSucesso('Autor cadastrado com sucesso.');
       this.listarAutores();
     });
+  }
+
+  listarLivros() {
+    this.livroService.listar().subscribe((retorno: Livro[]) => {
+      this.livros = retorno;
+    });
+  }
+
+  novo() {
+    this.limparFormulario();
+    this.editando = false;
+    this.mostrandoFormulario = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+  }
+
+  cancelarFormulario() {
+    this.limparFormulario();
+    this.editando = false;
+    this.mostrandoFormulario = false;
+    this.mensagemErro = '';
   }
 
   abrirConfirmacaoExclusao(autor: Autor) {
@@ -76,8 +113,15 @@ export class AutoresComponent implements OnInit {
       return;
     }
 
+    if (this.temLivroVinculado(this.autorParaExcluir.id)) {
+      this.autorParaExcluir = null;
+      this.mensagemErro = 'Não é possível excluir um autor com livros cadastrados.';
+      return;
+    }
+
     this.autorService.excluir(this.autorParaExcluir.id).subscribe(() => {
       this.autorParaExcluir = null;
+      this.mostrarSucesso('Autor excluido com sucesso.');
       this.listarAutores();
     });
   }
@@ -85,12 +129,19 @@ export class AutoresComponent implements OnInit {
   editar(autor: Autor) {
     this.autor = { ...autor };
     this.editando = true;
+    this.mostrandoFormulario = true;
   }
 
   atualizar() {
+    if (!this.formularioValido()) {
+      return;
+    }
+
     this.autorService.atualizar(this.autor.id, this.autor).subscribe(() => {
       this.limparFormulario();
       this.editando = false;
+      this.mostrandoFormulario = false;
+      this.mostrarSucesso('Autor atualizado com sucesso.');
       this.listarAutores();
     });
   }
@@ -110,6 +161,35 @@ export class AutoresComponent implements OnInit {
       dataNascimento: '',
       nacionalidade: ''
     };
+    this.mensagemErro = '';
+  }
+
+  mostrarSucesso(mensagem: string) {
+    this.mensagemSucesso = mensagem;
+    setTimeout(() => this.mensagemSucesso = '', 3000);
+  }
+
+  formatarData(data: string): string {
+    if (!data) {
+      return '';
+    }
+
+    const partes = data.split('-');
+    return partes.length == 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : data;
+  }
+
+  temLivroVinculado(idAutor: number | string): boolean {
+    return this.livros.some(livro => livro.idAutor == idAutor);
+  }
+
+  formularioValido(): boolean {
+    if (!this.autor.nome.trim() || !this.autor.dataNascimento || !this.autor.nacionalidade.trim()) {
+      this.mensagemErro = 'Preencha nome, data de nascimento e nacionalidade.';
+      return false;
+    }
+
+    this.mensagemErro = '';
+    return true;
   }
 
   maiorIdNumerico(): number {

@@ -7,6 +7,8 @@ import { Autor } from '../../models/autor';
 
 import { LivroService } from '../../services/livro.service';
 import { AutorService } from '../../services/autor.service';
+import { LocacaoService } from '../../services/locacao.service';
+import { Locacao } from '../../models/locacao';
 
 @Component({
   selector: 'app-livros',
@@ -22,9 +24,13 @@ export class LivrosComponent implements OnInit {
   livros: Livro[] = [];
   livrosFiltrados: Livro[] = [];
   autores: Autor[] = [];
+  locacoes: Locacao[] = [];
 
   pesquisa = '';
   editando = false;
+  mostrandoFormulario = false;
+  mensagemErro = '';
+  mensagemSucesso = '';
   livroParaExcluir: Livro | null = null;
 
   livro: Livro = {
@@ -39,12 +45,14 @@ export class LivrosComponent implements OnInit {
 
   constructor(
     private livroService: LivroService,
-    private autorService: AutorService
+    private autorService: AutorService,
+    private locacaoService: LocacaoService
   ) {}
 
   ngOnInit(): void {
     this.listarLivros();
     this.listarAutores();
+    this.listarLocacoes();
   }
 
   listarLivros() {
@@ -60,7 +68,17 @@ export class LivrosComponent implements OnInit {
     });
   }
 
+  listarLocacoes() {
+    this.locacaoService.listar().subscribe((retorno: Locacao[]) => {
+      this.locacoes = retorno;
+    });
+  }
+
   salvar() {
+    if (!this.formularioValido()) {
+      return;
+    }
+
     const maiorCodigo = this.livros.length > 0
       ? Math.max(...this.livros.map(l => l.codigo || 0))
       : 0;
@@ -75,8 +93,25 @@ export class LivrosComponent implements OnInit {
 
     this.livroService.criar(novoLivro).subscribe(() => {
       this.limparFormulario();
+      this.mostrandoFormulario = false;
+      this.mostrarSucesso('Livro cadastrado com sucesso.');
       this.listarLivros();
     });
+  }
+
+  novo() {
+    this.limparFormulario();
+    this.editando = false;
+    this.mostrandoFormulario = true;
+    this.mensagemErro = '';
+    this.mensagemSucesso = '';
+  }
+
+  cancelarFormulario() {
+    this.limparFormulario();
+    this.editando = false;
+    this.mostrandoFormulario = false;
+    this.mensagemErro = '';
   }
 
   abrirConfirmacaoExclusao(livro: Livro) {
@@ -92,8 +127,15 @@ export class LivrosComponent implements OnInit {
       return;
     }
 
+    if (this.temLocacaoAtiva(this.livroParaExcluir.id)) {
+      this.livroParaExcluir = null;
+      this.mensagemErro = 'Não é possível excluir um livro com locação ativa.';
+      return;
+    }
+
     this.livroService.excluir(this.livroParaExcluir.id).subscribe(() => {
       this.livroParaExcluir = null;
+      this.mostrarSucesso('Livro excluido com sucesso.');
       this.listarLivros();
     });
   }
@@ -101,12 +143,19 @@ export class LivrosComponent implements OnInit {
   editar(livro: Livro) {
     this.livro = { ...livro };
     this.editando = true;
+    this.mostrandoFormulario = true;
   }
 
   atualizar() {
+    if (!this.formularioValido()) {
+      return;
+    }
+
     this.livroService.atualizar(this.livro.id, this.livro).subscribe(() => {
       this.limparFormulario();
       this.editando = false;
+      this.mostrandoFormulario = false;
+      this.mostrarSucesso('Livro atualizado com sucesso.');
       this.listarLivros();
     });
   }
@@ -114,6 +163,7 @@ export class LivrosComponent implements OnInit {
   consultar() {
     this.livrosFiltrados = this.livros.filter(l =>
       l.titulo.toLowerCase().includes(this.pesquisa.toLowerCase()) ||
+      this.statusLivro(l.id).toLowerCase().includes(this.pesquisa.toLowerCase()) ||
       l.codigo.toString().includes(this.pesquisa)
     );
   }
@@ -121,6 +171,47 @@ export class LivrosComponent implements OnInit {
   buscarAutor(idAutor: number | string): string {
     const autor = this.autores.find(a => a.id == idAutor);
     return autor ? autor.nome : '';
+  }
+
+  temLocacaoAtiva(idLivro: number | string): boolean {
+    return this.locacoes.some(locacao => locacao.idLivro == idLivro && this.calcularStatusLocacao(locacao) != 'Devolvido');
+  }
+
+  statusLivro(idLivro: number | string): string {
+    const locacaoAtiva = this.locacoes.find(locacao =>
+      locacao.idLivro == idLivro && this.calcularStatusLocacao(locacao) != 'Devolvido'
+    );
+
+    return locacaoAtiva ? this.calcularStatusLocacao(locacaoAtiva) : 'Disponível';
+  }
+
+  calcularStatusLocacao(locacao: Locacao): string {
+    if (locacao.status == 'Devolvido') {
+      return 'Devolvido';
+    }
+
+    if (locacao.dataDevolucao && this.dataPassou(locacao.dataDevolucao)) {
+      return 'Atrasado';
+    }
+
+    return 'Emprestado';
+  }
+
+  dataPassou(data: string): boolean {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const dataComparacao = new Date(`${data}T00:00:00`);
+    return dataComparacao < hoje;
+  }
+
+  formatarData(data: string): string {
+    if (!data) {
+      return '';
+    }
+
+    const partes = data.split('-');
+    return partes.length == 3 ? `${partes[2]}/${partes[1]}/${partes[0]}` : data;
   }
 
   limparFormulario() {
@@ -133,6 +224,22 @@ export class LivrosComponent implements OnInit {
       editora: '',
       genero: ''
     };
+    this.mensagemErro = '';
+  }
+
+  mostrarSucesso(mensagem: string) {
+    this.mensagemSucesso = mensagem;
+    setTimeout(() => this.mensagemSucesso = '', 3000);
+  }
+
+  formularioValido(): boolean {
+    if (!this.livro.titulo.trim() || !this.livro.idAutor || !this.livro.dataPublicacao || !this.livro.editora.trim() || !this.livro.genero.trim()) {
+      this.mensagemErro = 'Preencha título, autor, data de publicação, editora e gênero.';
+      return false;
+    }
+
+    this.mensagemErro = '';
+    return true;
   }
 
   maiorIdNumerico(): number {
